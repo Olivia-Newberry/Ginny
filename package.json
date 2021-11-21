@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "discord.js": "^13.3.0",
+    "sql-template-strings": "^2.2.2",
+    "sqlite": "^4.0.23",
+    "sqlite3": "^5.0.2"
+  }
+}
