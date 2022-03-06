@@ -7,6 +7,7 @@ const client = new Client({
 	partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
 });
 client.config = config;
+const logger = require("./modules/Logger.js");
 
 client.commandCooldown = new Set();
 client.commands = new Collection();
@@ -82,21 +83,39 @@ client.runSQL(sql);
 
 
 const init = async () => {
-  const commands = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
+  // const commands = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
+  // for (const file of commands) {
+  //   const commandName = file.split(".")[0];
+  //   const command = require(`./commands/${file}`);
+  //   console.log(`Attempting to load command ${commandName}`);
+  //   client.commands.set(commandName, command);
+  // }
+  const commands = fs.readdirSync("./commands/").filter(file => file.endsWith(".js"));
   for (const file of commands) {
-    const commandName = file.split(".")[0];
-    const command = require(`./commands/${file}`);
-    console.log(`Attempting to load command ${commandName}`);
-    client.commands.set(commandName, command);
+    const props = require(`./commands/${file}`);
+    logger.log(`Loading Command: ${props.help.name}. 👌`, "log");
+    client.container.commands.set(props.help.name, props);
+    props.conf.aliases.forEach(alias => {
+      client.container.aliases.set(alias, props.help.name);
+    });
+  }
+  const adminCommands = fs.readdirSync("./adminCommands/").filter(file => file.endsWith(".js"));
+  for (const file of adminCommands) {
+    const props = require(`./adminCommands/${file}`);
+    logger.log(`Loading Command: ${props.help.name}. 👌`, "log");
+    client.container.adminCommands.set(props.help.name, props);
+    props.conf.aliases.forEach(alias => {
+      client.container.aliases.set(alias, props.help.name);
+    });
   }
 
-  const adminCommands = fs.readdirSync("./adminCommands").filter(file => file.endsWith(".js"));
-  for (const file of adminCommands) {
-    const adminCommandName = file.split(".")[0];
-    const adminCommand = require(`./adminCommands/${file}`);
-    console.log(`Attempting to load admin command ${adminCommandName}`);
-    client.adminCommands.set(adminCommandName, adminCommand);
-  }
+  // const adminCommands = fs.readdirSync("./adminCommands").filter(file => file.endsWith(".js"));
+  // for (const file of adminCommands) {
+  //   const adminCommandName = file.split(".")[0];
+  //   const adminCommand = require(`./adminCommands/${file}`);
+  //   console.log(`Attempting to load admin command ${adminCommandName}`);
+  //   client.adminCommands.set(adminCommandName, adminCommand);
+  // }
 
   const events = fs.readdirSync("./events").filter(file => file.endsWith(".js"));
   for (const file of events) {
