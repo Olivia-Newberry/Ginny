@@ -1,8 +1,11 @@
 {
   "dependencies": {
+    "@sapphire/time-utilities": "^1.7.8",
+    "colorette": "^2.0.19",
     "discord.js": "^13.3.0",
     "sql-template-strings": "^2.2.2",
     "sqlite": "^4.0.23",
-    "sqlite3": "^4.2.0"
+    "sqlite3": "^4.2.0",
+    "time-utilities": "^1.0.2"
   }
 }

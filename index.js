@@ -94,7 +94,7 @@ const init = async () => {
   for (const file of commands) {
     const props = require(`./commands/${file}`);
     logger.log(`Loading Command: ${props.help.name}. 👌`, "log");
-    client.container.commands.set(props.help.name, props);
+    client.commands.set(props.help.name, props);
     props.conf.aliases.forEach(alias => {
       client.container.aliases.set(alias, props.help.name);
     });
@@ -103,7 +103,7 @@ const init = async () => {
   for (const file of adminCommands) {
     const props = require(`./adminCommands/${file}`);
     logger.log(`Loading Command: ${props.help.name}. 👌`, "log");
-    client.container.adminCommands.set(props.help.name, props);
+    client.adminCommands.set(props.help.name, props);
     props.conf.aliases.forEach(alias => {
       client.container.aliases.set(alias, props.help.name);
     });
